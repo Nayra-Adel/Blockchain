@@ -4,10 +4,12 @@ import java.util.List;
 public class Blockchain {
 
     private List<Block> blockChain = new ArrayList<Block>();
+    private int difficulty;
 
     public Blockchain() {
 
         blockChain.add(this.createGenesisBlock());
+        setDificulty(3);
     }
 
     public List<Block> getBlockChain() { return blockChain; }
@@ -16,8 +18,12 @@ public class Blockchain {
 
     public int getBlockChainSize() { return blockChain.size(); }
 
+    public int getDificulty() { return difficulty; }
+
+    public void setDificulty(int difficulty) { this.difficulty = difficulty; }
+
     private Block createGenesisBlock(){
-        return new Block("Genesis Block", 24);
+        return new Block("Genesis Block", 20180424);
     }
 
     private Block getLatestBlock(){
@@ -28,7 +34,7 @@ public class Blockchain {
     public void addBlock(Block newBlock){
 
         newBlock.setPrevHash(this.getLatestBlock().getHash());
-        newBlock.setHash(newBlock.generateHash());
+        newBlock.mineBlock(getDificulty());
         this.blockChain.add(newBlock);
 
     }

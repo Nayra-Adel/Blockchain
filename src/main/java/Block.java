@@ -6,7 +6,7 @@ public class Block {
     private String prevHash;
     private String data;
     private long timeStamp;
-    private int nonce;
+    private int nonce = 0;
 
     private HashText hashText;
 
@@ -29,6 +29,19 @@ public class Block {
         }catch (Exception e) {}
 
         return "null";
+    }
+
+    public void mineBlock(int difficulty){
+
+        String mine = "";
+
+        for(int i = 0; i < difficulty; ++i) mine += "0";
+
+        while (!this.getHash().substring(0, difficulty).equals(mine)) {
+
+            nonce++;
+            setHash(this.generateHash());
+        }
     }
 
     public String getHash() { return hash; }
