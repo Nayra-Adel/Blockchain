@@ -9,18 +9,8 @@ public class Blockchain {
     public Blockchain() {
 
         blockChain.add(this.createGenesisBlock());
-        setDificulty(3);
+        setDifficulty(3);
     }
-
-    public List<Block> getBlockChain() { return blockChain; }
-
-    public void setBlockChain(List<Block> blockChain) { this.blockChain = blockChain; }
-
-    public int getBlockChainSize() { return blockChain.size(); }
-
-    public int getDificulty() { return difficulty; }
-
-    public void setDificulty(int difficulty) { this.difficulty = difficulty; }
 
     private Block createGenesisBlock(){
         return new Block("Genesis Block", 20180424);
@@ -34,9 +24,26 @@ public class Blockchain {
     public void addBlock(Block newBlock){
 
         newBlock.setPrevHash(this.getLatestBlock().getHash());
-        newBlock.mineBlock(getDificulty());
+        newBlock.mineBlock(getDifficulty());
         this.blockChain.add(newBlock);
 
+    }
+
+    public Boolean isValid(){
+
+        Block currentBlock, prevBlock;
+
+        for(int i=1; i < blockChain.size() -1 ; ++i){
+
+            currentBlock = blockChain.get(i);
+            prevBlock = blockChain.get(i-1);
+
+            if(!currentBlock.getHash().equals(currentBlock.generateHash())){ return false; }
+            if(!currentBlock.getPrevHash().equals(prevBlock.getHash())){ return false; }
+
+        }
+
+        return true;
     }
 
     public void displayBlockChain(){
@@ -52,4 +59,15 @@ public class Blockchain {
 
         }
     }
+
+    public List<Block> getBlockChain() { return blockChain; }
+
+    public void setBlockChain(List<Block> blockChain) { this.blockChain = blockChain; }
+
+    public int getBlockChainSize() { return blockChain.size(); }
+
+    public int getDifficulty() { return difficulty; }
+
+    public void setDifficulty(int difficulty) { this.difficulty = difficulty; }
+
 }
