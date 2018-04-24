@@ -1,3 +1,5 @@
+import hash.HashText;
+
 public class Block {
 
     private String hash;
@@ -6,14 +8,27 @@ public class Block {
     private long timeStamp;
     private int nonce;
 
+    private HashText hashText;
+
+
     public Block(String data, long timeStamp) {
 
         setData(data);
         setTimeStamp(timeStamp);
 
-        setHash("");
+        setHash(generateHash());
         setPrevHash("");
 
+    }
+
+    public String generateHash(){
+
+        String hashData = getPrevHash() + getTimeStamp() + getData() + getNonce();
+        try {
+            return hashText.sha256(hashData);
+        }catch (Exception e) {}
+
+        return "null";
     }
 
     public String getHash() { return hash; }

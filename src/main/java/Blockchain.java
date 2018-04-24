@@ -28,7 +28,7 @@ public class Blockchain {
     public void addBlock(Block newBlock){
 
         newBlock.setPrevHash(this.getLatestBlock().getHash());
-        newBlock.setHash("Hash Fn..");
+        newBlock.setHash(newBlock.generateHash());
         this.blockChain.add(newBlock);
 
     }
