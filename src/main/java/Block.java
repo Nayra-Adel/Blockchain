@@ -1,19 +1,25 @@
 import hash.HashText;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Block {
 
     private String hash;
     private String prevHash;
-    private String data;
+
+    private List <Transaction> transaction = new ArrayList<Transaction>();
+
     private long timeStamp;
+
     private int nonce = 0;
 
     private HashText hashText;
 
 
-    public Block(String data, long timeStamp) {
+    public Block(List<Transaction> transaction, long timeStamp) {
 
-        setData(data);
+        setTransaction(transaction);
         setTimeStamp(timeStamp);
 
         setHash(generateHash());
@@ -23,10 +29,10 @@ public class Block {
 
     public String generateHash(){
 
-        String hashData = getPrevHash() + getTimeStamp() + getData() + getNonce();
-        try {
-            return hashText.sha256(hashData);
-        }catch (Exception e) {}
+        String hashData = getPrevHash() + getTimeStamp() + getTransaction() + getNonce();
+
+        try { return hashText.sha256(hashData); }
+        catch (Exception e) {}
 
         return "null";
     }
@@ -52,9 +58,9 @@ public class Block {
 
     public void setPrevHash(String prevHash) { this.prevHash = prevHash; }
 
-    public String getData() { return data; }
+    public List<Transaction> getTransaction() { return transaction; }
 
-    public void setData(String data) { this.data = data; }
+    public void setTransaction(List<Transaction> transaction) { this.transaction = transaction; }
 
     public long getTimeStamp() { return timeStamp; }
 

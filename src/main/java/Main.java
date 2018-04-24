@@ -4,17 +4,19 @@ public class Main {
 
         Blockchain blockchain = new Blockchain();
 
-        blockchain.addBlock(new Block("Block 1", 2017));
-        blockchain.addBlock(new Block("Block 2", 2018));
-        blockchain.addBlock(new Block("Block 3", 2019));
+        blockchain.createTransaction(new Transaction("Nayra","Reham",500));
+        blockchain.createTransaction(new Transaction("Sandra","Nayra",1000));
 
-        blockchain.displayBlockChain();
+        System.out.println("balance "+ blockchain.checkBalance("Reham"));
 
-        System.out.println("BlockChain is valid? " + blockchain.isValid());
+        blockchain.minePendingTransaction("Reham");
 
-        blockchain.getBlockChain().get(1).setData("Nayra");
+        System.out.println("Rehame's balance (before) : "+ blockchain.checkBalance("Reham"));
 
-        System.out.println("BlockChain is valid? " + blockchain.isValid());
+        blockchain.minePendingTransaction("Reham");
+        System.out.println("Rehame's balance (after) : "+ blockchain.checkBalance("Reham"));
+        System.out.println("Nayra's balance "+ blockchain.checkBalance("Nayra"));
+        System.out.println("Sandra's balance "+ blockchain.checkBalance("Sandra"));
 
     }
 }
