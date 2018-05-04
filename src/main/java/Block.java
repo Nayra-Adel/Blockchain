@@ -1,14 +1,15 @@
 import hash.HashText;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Block {
+public class Block implements Serializable{
 
     private String hash;
     private String prevHash;
 
-    private List <Transaction> transaction = new ArrayList<Transaction>();
+    private List <Transaction> transaction = new ArrayList<>();
 
     private long timeStamp;
 

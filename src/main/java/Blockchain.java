@@ -1,9 +1,10 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Blockchain {
+public class Blockchain implements Serializable {
 
-    private List<Block> blockChain;
+    private List<Block> blocks;
 
     private List <Transaction> pendingTransaction ;
 
@@ -13,11 +14,11 @@ public class Blockchain {
 
     public Blockchain() {
 
-        blockChain = new ArrayList<Block>();
+        blocks = new ArrayList<Block>();
         pendingTransaction = new ArrayList<Transaction>();
 
         List <Transaction> transactions = new ArrayList<Transaction>();
-        blockChain.add(this.createGenesisBlock(transactions));
+        blocks.add(this.createGenesisBlock(transactions));
 
         setDifficulty(3);
         setReward(500);
@@ -30,7 +31,7 @@ public class Blockchain {
 
     private Block getLatestBlock(){
 
-        return getBlockChain().get(getBlockChainSize() - 1);
+        return getBlocks().get(getBlockChainSize() - 1);
     }
 
     public void minePendingTransaction(String miningRewardAddress){
@@ -41,7 +42,7 @@ public class Blockchain {
 
         block.mineBlock(difficulty);
 
-        this.blockChain.add(block);
+        this.blocks.add(block);
 
         pendingTransaction = new ArrayList<Transaction>();
         pendingTransaction.add(new Transaction("system",miningRewardAddress,reward));
@@ -58,16 +59,16 @@ public class Blockchain {
         int balance = 0;
         for (int i = 0; i < getBlockChainSize(); ++i) {
 
-            for (int j = 0; j < blockChain.get(i).getTransaction().size(); ++j) {
+            for (int j = 0; j < blocks.get(i).getTransaction().size(); ++j) {
 
-                if(blockChain.get(i).getTransaction().get(j).getTransactionFrom().equals(address)) {
+                if(blocks.get(i).getTransaction().get(j).getTransactionFrom().equals(address)) {
 
-                    balance -= blockChain.get(i).getTransaction().get(j).getAmount();
+                    balance -= blocks.get(i).getTransaction().get(j).getAmount();
                 }
 
-                else if(blockChain.get(i).getTransaction().get(j).getTransactionTo().equals(address)) {
+                else if(blocks.get(i).getTransaction().get(j).getTransactionTo().equals(address)) {
 
-                    balance += blockChain.get(i).getTransaction().get(j).getAmount();
+                    balance += blocks.get(i).getTransaction().get(j).getAmount();
                 }
             }
         }
@@ -75,26 +76,26 @@ public class Blockchain {
 
     }
 
-    public Boolean isValid(){
+    public int isValid(){
 
         Block currentBlock, prevBlock;
 
-        for(int i = 1; i < blockChain.size() -1 ; ++i){
+        for(int i = 1; i < blocks.size() -1 ; ++i){
 
-            currentBlock = blockChain.get(i);
-            prevBlock = blockChain.get(i-1);
+            currentBlock = blocks.get(i);
+            prevBlock = blocks.get(i-1);
 
-            if(!currentBlock.getHash().equals(currentBlock.generateHash())){ return false; }
-            if(!currentBlock.getPrevHash().equals(prevBlock.getHash())){ return false; }
+            if(!currentBlock.getHash().equals(currentBlock.generateHash())){ return i; }
+            if(!currentBlock.getPrevHash().equals(prevBlock.getHash())){ return i; }
 
         }
 
-        return true;
+        return getBlockChainSize();
     }
 
     public void displayBlockChain(){
 
-        for(Block block : blockChain){
+        for(Block block : blocks){
 
             System.out.println(
                     "Data : " + block.getTransaction() + "\n"+
@@ -106,11 +107,11 @@ public class Blockchain {
         }
     }
 
-    public List<Block> getBlockChain() { return blockChain; }
+    public List<Block> getBlocks() { return blocks; }
 
-    public void setBlockChain(List<Block> blockChain) { this.blockChain = blockChain; }
+    public void setBlocks(List<Block> blocks) { this.blocks = blocks; }
 
-    public int getBlockChainSize() { return blockChain.size(); }
+    public int getBlockChainSize() { return blocks.size(); }
 
     public int getDifficulty() { return difficulty; }
 
